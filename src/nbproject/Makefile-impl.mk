@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=MyButtons.X
+PROJECTNAME=src
 
 # Active Configuration
 DEFAULTCONF=default
