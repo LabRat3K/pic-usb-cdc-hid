@@ -60,6 +60,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /* Demo project includes */
 #include "app_led_usb_status.h"
 #include "app_device_keyboard.h"
+#include "app_device_cdc_basic.h"
 
 
 
@@ -68,7 +69,6 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // Section: File Scope or Global Constants
 // *****************************************************************************
 // *****************************************************************************
-volatile signed int SOFCounter = 0;
 
 
 // *****************************************************************************

@@ -26,4 +26,6 @@
 void APP_KeyboardInit(void);
 void APP_KeyboardTasks(void);
 
+extern volatile signed int SOFCounter; // Updated by loop in MAIN.C, but used in APP_KEYBOARD
+
 #endif
