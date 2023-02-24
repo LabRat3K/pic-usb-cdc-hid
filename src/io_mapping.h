@@ -28,13 +28,6 @@
 #define BUTTON_USB_DEVICE_HID_KEYBOARD_KEY              BUTTON_S1
 #define BUTTON_USB_DEVICE_REMOTE_WAKEUP                 BUTTON_S1
 
-//#define BUTTON_MAP
-//#define BUTTON_VOICE_SEARCH
-//#define BUTTON_USER0
-//#define BUTTON_USER1
-#define BUTTON_VOL_UP                                   BUTTON_S6
-#define BUTTON_VOL_DN                                   BUTTON_S5
-
 /* keyboard key code values */
 #define KEY_VAL_VOL_UP                                  (128)
 #define KEY_VAL_VOL_DN                                  (129)

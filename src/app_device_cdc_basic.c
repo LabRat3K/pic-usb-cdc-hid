@@ -85,7 +85,7 @@ void APP_DeviceCDCBasicDemoTasks()
      * byte[0] : message type (0x01: normal key)
      * byte[1] : payload
      */
-#if 1
+#if 0
     if(BUTTON_IsPressed(BUTTON_S1) == true)
     {
         if(buttonPressed == false)
@@ -99,78 +99,6 @@ void APP_DeviceCDCBasicDemoTasks()
             }
         }
     }
-    else if(BUTTON_IsPressed(BUTTON_S2) == true)
-    {
-        /* Make sure that we only send the message once per button press and
-         * not continuously as the button is held.
-         */
-        if(buttonPressed == false)
-        {
-            /* Make sure that the CDC driver is ready for a transmission.
-             */
-            if(mUSBUSARTIsTxTrfReady() == true)
-            {
-                writeBuffer[0] = CDC_TYPE_LAUNCH;
-                writeBuffer[1] = CDC_VAL_KEY2;
-                putUSBUSART(writeBuffer,2);
-                buttonPressed = true;
-            }
-        }
-    }
-    else if(BUTTON_IsPressed(BUTTON_S3) == true)
-    {
-        /* Make sure that we only send the message once per button press and
-         * not continuously as the button is held.
-         */
-        if(buttonPressed == false)
-        {
-            /* Make sure that the CDC driver is ready for a transmission.
-             */
-            if(mUSBUSARTIsTxTrfReady() == true)
-            {
-                writeBuffer[0] = CDC_TYPE_LAUNCH;
-                writeBuffer[1] = CDC_VAL_KEY3;
-                putUSBUSART(writeBuffer,2);
-                buttonPressed = true;
-            }
-        }
-    }
-    else if(BUTTON_IsPressed(BUTTON_S4) == true)
-    {
-        /* Make sure that we only send the message once per button press and
-         * not continuously as the button is held.
-         */
-        if(buttonPressed == false)
-        {
-            /* Make sure that the CDC driver is ready for a transmission.
-             */
-            if(mUSBUSARTIsTxTrfReady() == true)
-            {
-                writeBuffer[0] = CDC_TYPE_LAUNCH;
-                writeBuffer[1] = CDC_VAL_KEY4;
-                putUSBUSART(writeBuffer,2);
-                buttonPressed = true;
-            }
-        }
-    }
-    else if(BUTTON_IsPressed(BUTTON_S5) == true)
-    {
-        /* Make sure that we only send the message once per button press and
-         * not continuously as the button is held.
-         */
-        if(buttonPressed == false)
-        {
-            /* Make sure that the CDC driver is ready for a transmission.
-             */
-            if(mUSBUSARTIsTxTrfReady() == true)
-            {
-                writeBuffer[0] = CDC_TYPE_LAUNCH;
-                writeBuffer[1] = CDC_VAL_KEY5;
-                putUSBUSART(writeBuffer,2);
-                buttonPressed = true;
-            }
-        }
-    }
     else
     {
         /* If the button is released, we can then allow a new message to be
@@ -179,7 +107,7 @@ void APP_DeviceCDCBasicDemoTasks()
         buttonPressed = false;
     }
 #endif
-#if 0    
+#if 1    
     /* Check to see if there is a transmission in progress, if there isn't, then
      * we can see about performing an echo response to data received.
      */

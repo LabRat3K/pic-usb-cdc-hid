@@ -66,19 +66,15 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 const USB_DEVICE_DESCRIPTOR device_dsc=
 {
     0x12,    // Size of this descriptor in bytes
-    USB_DESCRIPTOR_DEVICE,                // DEVICE descriptor type
+    USB_DESCRIPTOR_DEVICE,  // DEVICE descriptor type
     0x0200,                 // USB Spec Release Number in BCD format
     0xEF,                   // Class Code
     0x02,                   // Subclass code
     0x01,                   // Protocol code
-    USB_EP0_BUFF_SIZE,          // Max packet size for EP0, see usb_config.h
+    USB_EP0_BUFF_SIZE,      // Max packet size for EP0, see usb_config.h
     MY_VID,                 // Vendor ID
-    //0x067b,
-    //0x067B,
-    //0x000A,                 // Product ID: Custom HID device demo
-    0x005E,
-    //0x2303,
-    0x0001,                 // Device release number in BCD format
+    0x005E,		    // Product ID: Custom HID device demo
+    0x0000,                 // Device release number in BCD format
     0x01,                   // Manufacturer string index
     0x02,                   // Product string index
     0x03,                   // Device serial number string index
@@ -98,8 +94,8 @@ const uint8_t configDescriptor1[]={
     250,                     // Max power consumption (2X mA)
 
     /* Interface Descriptor */
-    0x09,//sizeof(USB_INTF_DSC),   // Size of this descriptor in bytes
-    USB_DESCRIPTOR_INTERFACE,               // INTERFACE descriptor type
+    0x09,//sizeof(USB_INTF_DSC),  // Size of this descriptor in bytes
+    USB_DESCRIPTOR_INTERFACE,     // INTERFACE descriptor type
     0,                      // Interface Number
     0,                      // Alternate Setting Number
     2,                      // Number of endpoints in this intf
@@ -147,8 +143,8 @@ const uint8_t configDescriptor1[]={
     
     /* Interface Descriptor for CDC device */
     9,//sizeof(USB_INTF_DSC),   // Size of this descriptor in bytes
-    USB_DESCRIPTOR_INTERFACE,               // INTERFACE descriptor type
-    CDC_COMM_INTF_ID,                      // Interface Number
+    USB_DESCRIPTOR_INTERFACE,   // INTERFACE descriptor type
+    CDC_COMM_INTF_ID,           // Interface Number
     0,                      // Alternate Setting Number
     1,                      // Number of endpoints in this intf
     COMM_INTF,              // Class code
@@ -193,7 +189,7 @@ const uint8_t configDescriptor1[]={
 
     /* CDC Interface Descriptor */
     9,//sizeof(USB_INTF_DSC),   // Size of this descriptor in bytes
-    USB_DESCRIPTOR_INTERFACE,               // INTERFACE descriptor type
+    USB_DESCRIPTOR_INTERFACE,   // INTERFACE descriptor type
     2,                      // Interface Number
     0,                      // Alternate Setting Number
     2,                      // Number of endpoints in this intf

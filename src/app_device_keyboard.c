@@ -300,7 +300,7 @@ void APP_KeyboardTasks(void)
     }
 
     //Compute the elapsed time since the last input report was sent (we need
-    //this info for properly obeying the HID idle rate set by the host).
+    //this info to properly obey the HID idle rate set by the host).
     TimeDeltaMilliseconds = LocalSOFCount - OldSOFCount;
     //Check for negative value due to count wraparound back to zero.
     if(TimeDeltaMilliseconds < 0)
@@ -317,6 +317,8 @@ void APP_KeyboardTasks(void)
         OldSOFCount = LocalSOFCount - 5000;
     }
 
+
+// LabRat: Add a loop to poll the KEYPAD Matrix (results should be simlar to the WyseGuy polling loop)
 
     /* Check if the IN endpoint is busy, and if it isn't check if we want to send
      * keystroke data to the host. */
@@ -342,70 +344,11 @@ void APP_KeyboardTasks(void)
                 }
             }
         }
-#endif
-#if 0
-        else if( BUTTON_IsPressed( BUTTON_S2 ) == true )
-        {
-            if(keyboard.waitingForRelease == false)
-            {
-                keyboard.waitingForRelease = true;
-                //inputReport.keys[0] = KEY_VAL_VOL_UP;
-                keyboard.key = 10;
-                inputReport.keys[0] = keyboard.key;
-            }
-        }
-#endif
-#if 0
-        else if(BUTTON_IsPressed(BUTTON_S3) == true )
-        {
-            if(keyboard.waitingForRelease == false)
-            {
-                keyboard.waitingForRelease = true;
-                //inputReport.keys[0] = KEY_VAL_VOL_DN;
-                keyboard.key = 11;
-                inputReport.keys[0] = keyboard.key;
-            }
-        }
-#endif
-#if 0
-        else if(BUTTON_IsPressed(BUTTON_S4) == true )
-        {
-            if(keyboard.waitingForRelease == false)
-            {
-                keyboard.waitingForRelease = true;
-                //inputReport.keys[0] = KEY_VAL_VOL_DN;
-                keyboard.key = 12;
-                inputReport.keys[0] = keyboard.key;
-            }
-        }
-#endif        
-#if 0
-        else if(BUTTON_IsPressed(BUTTON_S5) == true )
-        {
-            if(keyboard.waitingForRelease == false)
-            {
-                keyboard.waitingForRelease = true;
-                //inputReport.keys[0] = KEY_VAL_VOL_DN;
-                keyboard.key = 13;
-                inputReport.keys[0] = keyboard.key;
-            }
-        }
-#endif
-#if 1
-        if(BUTTON_IsPressed(BUTTON_S6) == true )
-        {
-            if(keyboard.waitingForRelease == false)
-            {
-                keyboard.waitingForRelease = true;
-                keyboard.key = KEY_VAL_ESC;
-                inputReport.keys[0] = keyboard.key;
-            }
-        }
-#endif
         else
         {
             keyboard.waitingForRelease = false;
         }
+#endif
 
         //Check to see if the new packet contents are somehow different from the most
         //recently sent packet contents.
@@ -468,11 +411,11 @@ static void APP_KeyboardProcessOutputReport(void)
 {
     if(outputReport.leds.capsLock)
     {
-        //LED_On(LED_USB_DEVICE_HID_KEYBOARD_CAPS_LOCK);
+        LED_On(LED_D1);
     }
     else
     {
-        //LED_Off(LED_USB_DEVICE_HID_KEYBOARD_CAPS_LOCK);
+        LED_Off(LED_D1);
     }
 }
 

@@ -61,6 +61,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include "app_led_usb_status.h"
 #include "app_device_keyboard.h"
 #include "app_device_cdc_basic.h"
+#include "log.h"
 
 
 
@@ -78,6 +79,12 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 
+/*
+#define milliamps ((500/4)<<1) // Max it out??
+void app_config() @0x202 {
+   asm("GLOBAL _app_config");
+   asm("retlw ((500/4)<<1)");
+}*/
 // *****************************************************************************
 // *****************************************************************************
 // Section: Macros or Functions
@@ -90,12 +97,18 @@ int main(void)
 
     USBDeviceInit();
     USBDeviceAttach();
-
+ 
+     uart_init();
+     log_init();
+     log_byte('\n');
+     log_byte('$');
+     
     while(1)
     {
-        SYSTEM_Tasks();
-        #if defined(USB_POLLING)
-        /* Check bus status and service USB interrupts.  Interrupt or polling
+       // SYSTEM_Tasks();
+        log_service();
+         #if defined(USB_POLLING)
+         /* Check bus status and service USB interrupts.  Interrupt or polling
          * method.  If using polling, must call this function periodically.
          * This function will take care of processing and responding to SETUP
          * transactions (such as during the enumeration process when you first
@@ -121,21 +134,23 @@ int main(void)
         /* If we are currently suspended, then we need to see if we need to
          * issue a remote wakeup.  In either case, we shouldn't process any
          * keyboard commands since we aren't currently communicating to the host
-         * thus just continue back to the start of the while loop. */
+         * thus just continue back to the start of the while loopd. */
         if( USBIsDeviceSuspended()== true )
         {
             //Check if we should assert a remote wakeup request to the USB host,
             //when the user presses the pushbutton.
+/*
             if(BUTTON_IsPressed(BUTTON_USB_DEVICE_REMOTE_WAKEUP) == 0)
             {
                 //Add code here to issue a resume signal.
             }
+*/
 
             /* Jump back to the top of the while loop. */
             continue;
         }
 
-        /* Run the keyboard demo tasks. */
+        /* Run the keyboard & CDC demo tasks. */
         APP_KeyboardTasks();
         APP_DeviceCDCBasicDemoTasks();
     }//end while

@@ -95,16 +95,9 @@ void SYSTEM_Initialize( SYSTEM_STATE state )
                 ACTCON = 0x90;  //Active clock tuning enabled for USB
             #endif
             //LED_Enable(LED_USB_DEVICE_STATE);
-            //LED_Enable(LED_USB_DEVICE_HID_KEYBOARD_CAPS_LOCK);
             //BUTTON_Enable(BUTTON_USB_DEVICE_HID_KEYBOARD_KEY);
             /* initialize buttons */
             BUTTON_Enable(BUTTON_S1);
-            //BUTTON_Enable(BUTTON_S2);
-            BUTTON_Enable(2);
-            BUTTON_Enable(BUTTON_S3);
-            BUTTON_Enable(BUTTON_S4);
-            BUTTON_Enable(BUTTON_S5);
-            BUTTON_Enable(BUTTON_S6);
             break;
 			
         case SYSTEM_STATE_USB_SUSPEND: 
