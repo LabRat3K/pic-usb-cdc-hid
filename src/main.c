@@ -77,12 +77,11 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 // *****************************************************************************
 
 
-/*
 #define milliamps ((500/4)<<1) // Max it out??
 void app_config() @0x202 {
    asm("GLOBAL _app_config");
    asm("retlw ((500/4)<<1)");
-}*/
+}
 // *****************************************************************************
 // *****************************************************************************
 // Section: Macros or Functions
@@ -98,6 +97,10 @@ int main(void)
  
     while(1)
     {
+      if(BUTTON_IsPressed(BUTTON_S1) == true){
+          LED_On(LED_D1);
+          asm("reset");
+      }
        // SYSTEM_Tasks();
         #if defined(USB_POLLING)
          /* Check bus status and service USB interrupts.  Interrupt or polling
