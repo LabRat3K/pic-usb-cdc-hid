@@ -326,8 +326,9 @@ void APP_KeyboardTasks(void)
     {
         /* Clear the INPUT report buffer.  Set to all zeros. */
         memset(&inputReport, 0, sizeof(inputReport));
-#if 0
-        if( BUTTON_IsPressed(BUTTON_S1) == true )
+
+        //if( BUTTON_IsPressed(BUTTON_S1) == true )
+        if (true)
         {
             if(keyboard.waitingForRelease == false)
             {
@@ -348,7 +349,6 @@ void APP_KeyboardTasks(void)
         {
             keyboard.waitingForRelease = false;
         }
-#endif
 
         //Check to see if the new packet contents are somehow different from the most
         //recently sent packet contents.

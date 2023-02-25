@@ -100,7 +100,7 @@ const uint8_t configDescriptor1[]={
     0,                      // Alternate Setting Number
     2,                      // Number of endpoints in this intf
     HID_INTF,               // Class code
-    0, //BOOT_INTF_SUBCLASS,     // Subclass code
+    1, // LabRat - updated to 1 (Boot) from 0 BOOT_INTF_SUBCLASS,     // Subclass code
     HID_PROTOCOL_KEYBOARD,     // Protocol code
     0,                      // Interface string index
 

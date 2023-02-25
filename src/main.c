@@ -58,10 +58,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <usb/usb_device_hid.h>
 
 /* Demo project includes */
-#include "app_led_usb_status.h"
 #include "app_device_keyboard.h"
 #include "app_device_cdc_basic.h"
-#include "log.h"
 
 
 
@@ -98,16 +96,10 @@ int main(void)
     USBDeviceInit();
     USBDeviceAttach();
  
-     uart_init();
-     log_init();
-     log_byte('\n');
-     log_byte('$');
-     
     while(1)
     {
        // SYSTEM_Tasks();
-        log_service();
-         #if defined(USB_POLLING)
+        #if defined(USB_POLLING)
          /* Check bus status and service USB interrupts.  Interrupt or polling
          * method.  If using polling, must call this function periodically.
          * This function will take care of processing and responding to SETUP
@@ -160,6 +152,7 @@ int main(void)
 
 bool USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size)
 {
+
     switch((int)event)
     {
         case EVENT_TRANSFER:
@@ -169,6 +162,7 @@ bool USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size
             /* We are using the SOF as a timer to time the LED indicator.  Call
              * the LED update function here. */
             //APP_LEDUpdateUSBStatus();
+
             if(SOFCounter < 32767)
             {
                 SOFCounter++;
@@ -192,8 +186,8 @@ bool USER_USB_CALLBACK_EVENT_HANDLER(USB_EVENT event, void *pdata, uint16_t size
         case EVENT_CONFIGURED:
             /* When the device is configured, we can (re)initialize the keyboard
              * demo code. */
-            APP_KeyboardInit();
             APP_DeviceCDCBasicDemoInitialize();
+            APP_KeyboardInit();
             break;
 
         case EVENT_SET_DESCRIPTOR:

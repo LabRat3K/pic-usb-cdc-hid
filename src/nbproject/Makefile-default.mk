@@ -57,17 +57,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=main.c app_device_keyboard.c app_led_usb_status.c usb_descriptors.c system.c app_device_cdc_basic.c log.c usb/src/usb_device.c usb/src/usb_device_hid.c usb_device_cdc.c bsp_picaboo/buttons.c bsp_picaboo/leds.c
+SOURCEFILES_QUOTED_IF_SPACED=main.c app_device_keyboard.c usb_descriptors.c system.c app_device_cdc_basic.c log.c usb/src/usb_device.c usb/src/usb_device_hid.c usb_device_cdc.c bsp_picaboo/buttons.c bsp_picaboo/leds.c
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/app_device_keyboard.p1 ${OBJECTDIR}/app_led_usb_status.p1 ${OBJECTDIR}/usb_descriptors.p1 ${OBJECTDIR}/system.p1 ${OBJECTDIR}/app_device_cdc_basic.p1 ${OBJECTDIR}/log.p1 ${OBJECTDIR}/usb/src/usb_device.p1 ${OBJECTDIR}/usb/src/usb_device_hid.p1 ${OBJECTDIR}/usb_device_cdc.p1 ${OBJECTDIR}/bsp_picaboo/buttons.p1 ${OBJECTDIR}/bsp_picaboo/leds.p1
-POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/app_device_keyboard.p1.d ${OBJECTDIR}/app_led_usb_status.p1.d ${OBJECTDIR}/usb_descriptors.p1.d ${OBJECTDIR}/system.p1.d ${OBJECTDIR}/app_device_cdc_basic.p1.d ${OBJECTDIR}/log.p1.d ${OBJECTDIR}/usb/src/usb_device.p1.d ${OBJECTDIR}/usb/src/usb_device_hid.p1.d ${OBJECTDIR}/usb_device_cdc.p1.d ${OBJECTDIR}/bsp_picaboo/buttons.p1.d ${OBJECTDIR}/bsp_picaboo/leds.p1.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/main.p1 ${OBJECTDIR}/app_device_keyboard.p1 ${OBJECTDIR}/usb_descriptors.p1 ${OBJECTDIR}/system.p1 ${OBJECTDIR}/app_device_cdc_basic.p1 ${OBJECTDIR}/log.p1 ${OBJECTDIR}/usb/src/usb_device.p1 ${OBJECTDIR}/usb/src/usb_device_hid.p1 ${OBJECTDIR}/usb_device_cdc.p1 ${OBJECTDIR}/bsp_picaboo/buttons.p1 ${OBJECTDIR}/bsp_picaboo/leds.p1
+POSSIBLE_DEPFILES=${OBJECTDIR}/main.p1.d ${OBJECTDIR}/app_device_keyboard.p1.d ${OBJECTDIR}/usb_descriptors.p1.d ${OBJECTDIR}/system.p1.d ${OBJECTDIR}/app_device_cdc_basic.p1.d ${OBJECTDIR}/log.p1.d ${OBJECTDIR}/usb/src/usb_device.p1.d ${OBJECTDIR}/usb/src/usb_device_hid.p1.d ${OBJECTDIR}/usb_device_cdc.p1.d ${OBJECTDIR}/bsp_picaboo/buttons.p1.d ${OBJECTDIR}/bsp_picaboo/leds.p1.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/app_device_keyboard.p1 ${OBJECTDIR}/app_led_usb_status.p1 ${OBJECTDIR}/usb_descriptors.p1 ${OBJECTDIR}/system.p1 ${OBJECTDIR}/app_device_cdc_basic.p1 ${OBJECTDIR}/log.p1 ${OBJECTDIR}/usb/src/usb_device.p1 ${OBJECTDIR}/usb/src/usb_device_hid.p1 ${OBJECTDIR}/usb_device_cdc.p1 ${OBJECTDIR}/bsp_picaboo/buttons.p1 ${OBJECTDIR}/bsp_picaboo/leds.p1
+OBJECTFILES=${OBJECTDIR}/main.p1 ${OBJECTDIR}/app_device_keyboard.p1 ${OBJECTDIR}/usb_descriptors.p1 ${OBJECTDIR}/system.p1 ${OBJECTDIR}/app_device_cdc_basic.p1 ${OBJECTDIR}/log.p1 ${OBJECTDIR}/usb/src/usb_device.p1 ${OBJECTDIR}/usb/src/usb_device_hid.p1 ${OBJECTDIR}/usb_device_cdc.p1 ${OBJECTDIR}/bsp_picaboo/buttons.p1 ${OBJECTDIR}/bsp_picaboo/leds.p1
 
 # Source Files
-SOURCEFILES=main.c app_device_keyboard.c app_led_usb_status.c usb_descriptors.c system.c app_device_cdc_basic.c log.c usb/src/usb_device.c usb/src/usb_device_hid.c usb_device_cdc.c bsp_picaboo/buttons.c bsp_picaboo/leds.c
+SOURCEFILES=main.c app_device_keyboard.c usb_descriptors.c system.c app_device_cdc_basic.c log.c usb/src/usb_device.c usb/src/usb_device_hid.c usb_device_cdc.c bsp_picaboo/buttons.c bsp_picaboo/leds.c
 
 
 
@@ -109,14 +109,6 @@ ${OBJECTDIR}/app_device_keyboard.p1: app_device_keyboard.c  nbproject/Makefile-$
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -fasmfile -maddrqual=ignore -xassembler-with-cpp -I"bsp_picaboo" -I"./" -mwarn=0 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mosccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall -mc90lib $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/app_device_keyboard.p1 app_device_keyboard.c 
 	@-${MV} ${OBJECTDIR}/app_device_keyboard.d ${OBJECTDIR}/app_device_keyboard.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/app_device_keyboard.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
-	
-${OBJECTDIR}/app_led_usb_status.p1: app_led_usb_status.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/app_led_usb_status.p1.d 
-	@${RM} ${OBJECTDIR}/app_led_usb_status.p1 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c  -D__DEBUG=1   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -fasmfile -maddrqual=ignore -xassembler-with-cpp -I"bsp_picaboo" -I"./" -mwarn=0 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mosccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall -mc90lib $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/app_led_usb_status.p1 app_led_usb_status.c 
-	@-${MV} ${OBJECTDIR}/app_led_usb_status.d ${OBJECTDIR}/app_led_usb_status.p1.d 
-	@${FIXDEPS} ${OBJECTDIR}/app_led_usb_status.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 ${OBJECTDIR}/usb_descriptors.p1: usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
@@ -206,14 +198,6 @@ ${OBJECTDIR}/app_device_keyboard.p1: app_device_keyboard.c  nbproject/Makefile-$
 	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -fasmfile -maddrqual=ignore -xassembler-with-cpp -I"bsp_picaboo" -I"./" -mwarn=0 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mosccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall -mc90lib $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/app_device_keyboard.p1 app_device_keyboard.c 
 	@-${MV} ${OBJECTDIR}/app_device_keyboard.d ${OBJECTDIR}/app_device_keyboard.p1.d 
 	@${FIXDEPS} ${OBJECTDIR}/app_device_keyboard.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
-	
-${OBJECTDIR}/app_led_usb_status.p1: app_led_usb_status.c  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}" 
-	@${RM} ${OBJECTDIR}/app_led_usb_status.p1.d 
-	@${RM} ${OBJECTDIR}/app_led_usb_status.p1 
-	${MP_CC} $(MP_EXTRA_CC_PRE) -mcpu=$(MP_PROCESSOR_OPTION) -c   -mdfp="${DFP_DIR}/xc8"  -fno-short-double -fno-short-float -fasmfile -maddrqual=ignore -xassembler-with-cpp -I"bsp_picaboo" -I"./" -mwarn=0 -Wa,-a -DXPRJ_default=$(CND_CONF)  -msummary=-psect,-class,+mem,-hex,-file  -ginhx032 -Wl,--data-init -mno-keep-startup -mosccal -mno-resetbits -mno-save-resetbits -mno-download -mno-stackcall -mc90lib $(COMPARISON_BUILD)  -std=c90 -gdwarf-3 -mstack=compiled:auto:auto     -o ${OBJECTDIR}/app_led_usb_status.p1 app_led_usb_status.c 
-	@-${MV} ${OBJECTDIR}/app_led_usb_status.d ${OBJECTDIR}/app_led_usb_status.p1.d 
-	@${FIXDEPS} ${OBJECTDIR}/app_led_usb_status.p1.d $(SILENT) -rsi ${MP_CC_DIR}../  
 	
 ${OBJECTDIR}/usb_descriptors.p1: usb_descriptors.c  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
