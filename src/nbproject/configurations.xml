@@ -18,6 +18,8 @@
         <itemPath>bsp_pic16f1454/buttons.h</itemPath>
         <itemPath>bsp_pic16f1454/leds.h</itemPath>
         <itemPath>bsp_pic16f1454/power.h</itemPath>
+        <itemPath>bsp_keypad_v1/matrix.h</itemPath>
+        <itemPath>bsp_keypad_v1/pixel.h</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="framework" projectFiles="true">
         <itemPath>usb/usb_device.h</itemPath>
@@ -40,8 +42,10 @@
         <itemPath>log.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f3" displayName="bsp" projectFiles="true">
-        <itemPath>bsp_picaboo/buttons.c</itemPath>
-        <itemPath>bsp_picaboo/leds.c</itemPath>
+        <itemPath>bsp_keypad_v1/buttons.c</itemPath>
+        <itemPath>bsp_keypad_v1/leds.c</itemPath>
+        <itemPath>bsp_keypad_v1/matrix.c</itemPath>
+        <itemPath>bsp_keypad_v1/pixel.c</itemPath>
       </logicalFolder>
       <logicalFolder name="f2" displayName="framework" projectFiles="true">
         <itemPath>usb/src/usb_device.c</itemPath>
@@ -66,7 +70,7 @@
         <targetDevice>PIC16F1455</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>noID</platformTool>
+        <platformTool></platformTool>
         <languageToolchain>XC8</languageToolchain>
         <languageToolchainVersion>2.40</languageToolchainVersion>
         <platform>2</platform>
@@ -108,7 +112,7 @@
         <property key="default-char-type" value="true"/>
         <property key="define-macros" value=""/>
         <property key="disable-optimizations" value="false"/>
-        <property key="extra-include-directories" value="bsp_picaboo;.\"/>
+        <property key="extra-include-directories" value="bsp_keypad_v1;.\"/>
         <property key="favor-optimization-for" value="-speed,+space"/>
         <property key="garbage-collect-data" value="true"/>
         <property key="garbage-collect-functions" value="true"/>

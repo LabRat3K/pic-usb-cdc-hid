@@ -60,7 +60,7 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 /* Demo project includes */
 #include "app_device_keyboard.h"
 #include "app_device_cdc_basic.h"
-
+#include "pixel.h"
 
 
 // *****************************************************************************
@@ -94,11 +94,17 @@ int main(void)
 
     USBDeviceInit();
     USBDeviceAttach();
+    PIXEL_Enable();
+    PIXEL_setBaseEffect(BASE_EFFECT_LARSON);
  
     while(1)
     {
+      // Consider adding a DIRTY bit to reduce redrawing when nothnig has changed
+      PIXEL_sendArray();
+
       if(BUTTON_IsPressed(BUTTON_S1) == true){
-          LED_On(LED_D1);
+          PIXEL_floodBase(0,0x40,0);
+          PIXEL_sendArray();
           asm("reset");
       }
        // SYSTEM_Tasks();

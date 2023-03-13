@@ -94,7 +94,7 @@ void SYSTEM_Initialize( SYSTEM_STATE state )
                 OSCCON = 0xFC;  //HFINTOSC @ 16MHz, 3X PLL, PLL enabled
                 ACTCON = 0x90;  //Active clock tuning enabled for USB
             #endif
-            LED_Enable(LED_D1);
+            //LED_Enable(LED_D1);
             //BUTTON_Enable(BUTTON_USB_DEVICE_HID_KEYBOARD_KEY);
             /* initialize buttons */
             BUTTON_Enable(BUTTON_S1);

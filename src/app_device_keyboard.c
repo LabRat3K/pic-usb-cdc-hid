@@ -50,7 +50,8 @@ SUBSTITUTE GOODS, TECHNOLOGY, SERVICES, OR ANY CLAIMS BY THIRD PARTIES
 #include <usb/usb.h>
 #include <usb/usb_device_hid.h>
 
-#include "app_led_usb_status.h"
+#include "matrix.h"
+#include "pixel.h"
 
 // *****************************************************************************
 // *****************************************************************************
@@ -214,8 +215,6 @@ typedef struct
 {
     USB_HANDLE lastINTransmission;
     USB_HANDLE lastOUTTransmission;
-    unsigned char key;
-    bool waitingForRelease;
 } KEYBOARD;
 
 // *****************************************************************************
@@ -251,7 +250,76 @@ signed int LocalSOFCount;
 static signed int OldSOFCount;
 
 
+#define KEY_MOD_LCTRL  0x01
+#define KEY_MOD_LSHIFT 0x02
+#define KEY_MOD_LALT   0x04
+#define KEY_MOD_LMETA  0x08
 
+const uint8_t KEYMAP[12] = {
+   0x04,0x05,0x06,0x07,
+   0x08,0x09,0x0A,0x0B,
+   0x2B,0x0D,0x0E,0x29 };
+
+
+#define MACRO_CMD_KEY   0x80
+#define MACRO_CMD_WAIT  0x40
+#define MACRO_CMD_STR   0x20
+#define MACRO_CMD_DONE  0x00
+
+#define KEYSIMPLE 0x0
+#define KEYMACRO  0x80
+
+const uint8_t KEYMOD[12] = {
+   KEYMACRO|0x01,0x00,0x00,0x00,
+   KEYMACRO|0x02,0x00,KEYMACRO|0x03,KEYMACRO,
+   KEY_MOD_LALT,0x00,0x00,0x00 };
+
+typedef struct {
+   uint8_t len;
+   uint8_t str[6];
+} tMacroStr;
+
+const tMacroStr StringList[8] = {
+         {6,0x0b,0x08,0x0f,0,0x0f,0x12}, // 0
+         {3,0x0b,0x08,0x0f},
+         {3,0,0x0f,0x12},
+         {6,0,0,0,0,0,0},
+};
+                      
+
+#define MACRO_MOD(y) (y&0x0F)
+#define MACRO_CMD(y) (y&0xF0)
+
+typedef struct  {
+   uint8_t cmd;
+   uint8_t key;
+} tKeyNode;
+
+typedef tKeyNode tMacro[8];
+
+const tMacro MacroList[]={
+     {{MACRO_CMD_KEY|KEY_MOD_LALT,0x2B},{MACRO_CMD_WAIT,10},{MACRO_CMD_DONE,0}},
+     {{MACRO_CMD_KEY,0x09},{MACRO_CMD_KEY,0x08},{MACRO_CMD_WAIT,10},{MACRO_CMD_DONE,0}},
+     {{MACRO_CMD_STR|0,0x0},{MACRO_CMD_DONE,0}},
+     {{MACRO_CMD_STR|1,0x0},{MACRO_CMD_STR|3,0},{MACRO_CMD_WAIT,10},{MACRO_CMD_STR|2,0},{MACRO_CMD_DONE,0}},
+};
+
+
+#define PARSER_STATE_IDLE   0x00
+#define PARSER_STATE_SIMPLE 0x01
+#define PARSER_STATE_MACRO  0x80
+
+#define MACRO_STATE_SIMPLE  0x81
+#define MACRO_STATE_STRING  0x82
+#define MACRO_STATE_WAIT    0x84
+
+uint8_t parseState;
+uint8_t bid = 0;  // Bit ID (0..11)
+uint8_t countdown;
+uint8_t strId;
+uint8_t str_offset;
+uint8_t macroId;
+uint8_t macro_offset;
 
 // *****************************************************************************
 // *****************************************************************************
@@ -264,8 +332,10 @@ void APP_KeyboardInit(void)
     // transmission
     keyboard.lastINTransmission = 0;
     
-    keyboard.key = 4;
-    keyboard.waitingForRelease = false;
+
+    parseState = PARSER_STATE_IDLE;
+    bid= 0;
+    MATRIX_Enable();
 
     //Set the default idle rate to 500ms (until the host sends a SET_IDLE request to change it to a new value)
     keyboardIdleRate = 500;
@@ -284,6 +354,140 @@ void APP_KeyboardInit(void)
     //Arm OUT endpoint so we can receive caps lock, num lock, etc. info from host
     keyboard.lastOUTTransmission = HIDRxPacket(HID_EP,(uint8_t*)&outputReport, sizeof(outputReport) );
 }
+
+void APP_Macro(void) {
+   uint8_t i=0;
+   while (i<sizeof(inputReport)-2) {
+     uint8_t cmd = MACRO_CMD(MacroList[macroId][macro_offset].cmd);
+     switch (cmd) {
+        case MACRO_CMD_DONE: 
+            // change to idle
+            bid++;
+            parseState = PARSER_STATE_IDLE;
+            return;
+        case MACRO_CMD_KEY:
+              if (i==0) {    // If first simple key then record the modifiers
+                  inputReport.modifiers.value = MACRO_MOD(MacroList[macroId][macro_offset].cmd);
+              }
+
+              // If modifiers matches the inputReport, we can add this key to the payload
+              if (inputReport.modifiers.value == MACRO_MOD(MacroList[macroId][macro_offset].cmd)) {
+                 inputReport.keys[i++] = MacroList[macroId][macro_offset].key;
+                 macro_offset++;
+              }
+              break;
+
+        case MACRO_CMD_WAIT:
+            if (countdown==0) {
+              countdown = MacroList[macroId][macro_offset].key;
+              return;
+            } 
+            countdown--;
+            if (countdown==0) {
+               macro_offset++;
+            }
+            break;
+
+        case MACRO_CMD_STR:
+             if (countdown == 0) { // This is a setup condition
+                strId=MacroList[macroId][macro_offset].cmd&0x0F;
+                str_offset = 0;
+                countdown = StringList[strId].len;
+             } 
+
+             while ((countdown)&&(i<sizeof(inputReport)-2)) {
+                 // We are sending a character
+                 inputReport.keys[i++] = StringList[strId].str[str_offset];
+                 str_offset++;
+                 countdown--;
+
+                 if (countdown==0) {
+                    macro_offset++;
+                 }
+             }
+             break; 
+         default:
+             break;
+     }
+     //macro_offset++;
+   }
+}
+
+void APP_Idle(void) {
+   uint8_t i=0;
+
+   while (i<(sizeof(inputReport)-2)) {
+      uint8_t bstatus = (MATRIX_pinMap[bid>>3]>>(bid & 7))&1;
+
+      // While I haven't found a bit that matches.. increment BID
+      while((!bstatus) && (bid<sizeof(KEYMAP))) {
+         bid++;
+         bstatus = (MATRIX_pinMap[bid>>3]>>(bid & 7))&1;
+      } 
+
+
+      // Either I have a BIT (keypress) or NONE (overflow when bid=12)
+      if (bstatus) {
+         // Look-up this bid in our character map
+         if(bid<4) { // Quick and dirty test of base effects
+            PIXEL_setBaseEffect(bid);
+         }
+
+         // Add keypress animation
+	 PIXEL_flashKey(bid);
+
+         if (KEYMOD[bid]&KEYMACRO) {
+            if (macroId == (KEYMOD[bid]&0x3F)) {
+               bid++;
+            } else {
+               // Change to MACRO processing state
+               macroId = KEYMOD[bid]&0x3F;
+               parseState = PARSER_STATE_MACRO;
+               macro_offset=0;
+               APP_Macro();
+               return;
+            }
+         } else {
+            // If this key has modifiers, it must be sent in its OWN HID report
+            // If no modifiers, it can be bundled with other (non-modified) keys
+            if (KEYMOD[bid]) {
+               if (i>0) {
+                  break; // Skipping this 
+               } else {
+                  inputReport.modifiers.value = KEYMOD[bid]&0x0F;
+                  inputReport.keys[i++]       = KEYMAP[bid];
+                  bid++;
+                  break;
+               }
+            }
+
+            // Not KEYMOD .. so bundle and send (aka SIMPLE mode)
+            inputReport.keys[i] = KEYMAP[bid];
+            i++;
+            // Advance to Next Character
+            bid++;
+         }
+      } else {
+         // No match.. fill the array with 0x00
+         for ( ;i<sizeof(inputReport)-2;i++) {
+            inputReport.keys[i] = 0x00;
+         }
+      } //if (bstat)
+   }// while (i<sizeof(inputReport)-2)
+
+   // All possible indexes have been checked- scan again
+   if (bid==sizeof(KEYMAP)) {
+      uint8_t k;
+      for (k=0;k<sizeof(KEYMOD);k++) {
+        if (((MATRIX_pinMap[k>>3]>>(k&7))&1) == 0) {
+           if (KEYMOD[k] == (KEYMACRO| macroId)) 
+              macroId = 0xFF;
+        }
+      }
+      MATRIX_bChanged=0;
+   }
+} 
+
 
 void APP_KeyboardTasks(void)
 {
@@ -307,6 +511,10 @@ void APP_KeyboardTasks(void)
     {
         TimeDeltaMilliseconds = (32767 - OldSOFCount) + LocalSOFCount;
     }
+
+    if (TimeDeltaMilliseconds > 100){
+       PIXEL_Animate();
+    }
     //Check if the TimeDelay is quite large.  If the idle rate is == 0 (which represents "infinity"),
     //then the TimeDeltaMilliseconds could also become infinity (which would cause overflow)
     //if there is no recent button presses or other changes occurring on the keyboard.
@@ -318,7 +526,12 @@ void APP_KeyboardTasks(void)
     }
 
 
-// LabRat: Add a loop to poll the KEYPAD Matrix (results should be simlar to the WyseGuy polling loop)
+// Poll the KEYPAD Matrix (results should be simlar to the WyseGuy polling loop)
+
+    if (MATRIX_bChanged==0) { // NO Data pending.. poll for more
+       MATRIX_Poll();
+       bid = 0;
+    }
 
     /* Check if the IN endpoint is busy, and if it isn't check if we want to send
      * keystroke data to the host. */
@@ -327,27 +540,10 @@ void APP_KeyboardTasks(void)
         /* Clear the INPUT report buffer.  Set to all zeros. */
         memset(&inputReport, 0, sizeof(inputReport));
 
-        //if( BUTTON_IsPressed(BUTTON_S1) == true )
-        if (true)
-        {
-            if(keyboard.waitingForRelease == false)
-            {
-                keyboard.waitingForRelease = true;
-
-                /* Set the only important data, the key press data. */
-                inputReport.keys[0] = keyboard.key++;
-
-                //In this simulated keyboard, if the last key pressed exceeds the a-z + 0-9,
-                //then wrap back around so we send 'a' again.
-                if(keyboard.key == 40)
-                {
-                    keyboard.key = 4;
-                }
-            }
-        }
-        else
-        {
-            keyboard.waitingForRelease = false;
+        switch (parseState) {
+          case PARSER_STATE_IDLE: APP_Idle(); break;
+          case PARSER_STATE_MACRO: APP_Macro(); break;
+          default: break;
         }
 
         //Check to see if the new packet contents are somehow different from the most
@@ -409,6 +605,7 @@ void APP_KeyboardTasks(void)
 
 static void APP_KeyboardProcessOutputReport(void)
 {
+/*
     if(outputReport.leds.capsLock)
     {
         LED_On(LED_D1);
@@ -417,6 +614,7 @@ static void APP_KeyboardProcessOutputReport(void)
     {
         LED_Off(LED_D1);
     }
+*/
 }
 
 static void USBHIDCBSetReportComplete(void)

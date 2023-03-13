@@ -29,9 +29,9 @@
 
 #include <usb/usb.h>
 
-#include <app_led_usb_status.h>
 #include <app_device_cdc_basic.h>
 #include <usb_config.h>
+#include <matrix.h>
 
 /** VARIABLES ******************************************************/
 
@@ -64,6 +64,10 @@ void APP_DeviceCDCBasicDemoInitialize()
 
     buttonPressed = false;
 }
+const char ASCII[16]={'0','1','2','3','4','5','6','7',
+                      '8','9','A','B','C','D','E','F'};
+
+extern uint8_t bid;
 
 /*********************************************************************
 * Function: void APP_DeviceCDCBasicDemoTasks(void);
@@ -115,6 +119,7 @@ void APP_DeviceCDCBasicDemoTasks()
     {
         uint8_t i;
         uint8_t numBytesRead;
+#ifdef ECHO
 
         numBytesRead = getsUSBUSART(readBuffer, sizeof(readBuffer));
 
@@ -149,6 +154,11 @@ void APP_DeviceCDCBasicDemoTasks()
              */
             putUSBUSART(writeBuffer,numBytesRead);
         }
+#endif
+   uint8_t k=0;
+       writeBuffer[k++] = 'C';
+       writeBuffer[k++] = '\n';
+       putUSBUSART(writeBuffer,k);
     }
 #endif
     CDCTxService();
