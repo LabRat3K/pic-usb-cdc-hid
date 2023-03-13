@@ -9,12 +9,15 @@
 
 /*** MATRIX Definitions *********************************************/
 
-// Each bit represents the state of a key in the MATRIX 
+typedef unsigned char uint8_t;
+
+// Each bit represents the state of a key in the MATRIX
 //    1 = pressed
 //    0 = released
 
-extern uint8_t MATRIX_PinMap[2]; 
-extern bool    MATRIX_Changed;
+extern uint8_t MATRIX_pinMap[2];
+extern uint8_t MATRIX_changeMap[2];
+extern bool    MATRIX_bChanged;
 
 /*********************************************************************
 * Function: bool MATRIX_Poll(void);
@@ -47,7 +50,7 @@ void MATRIX_Enable(void);
 /*********************************************************************
 * Function: void MATRIX_Changed(void);
 *
-* Overview: Compares MATRIX_PinMap with previous data, and returns
+* Overview: Compares MATRIX_pinMap with previous data, and returns
 *           TRUE if the data has changed.
 *
 * PreCondition: none

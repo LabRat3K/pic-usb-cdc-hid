@@ -25,7 +25,6 @@
 #include <xc.h>
 
 #define LED_D1_LAT LATCbits.LATC2
-
 #define LED_D1_TRIS TRISCbits.TRISC2
 
 #define LED_ON  0
