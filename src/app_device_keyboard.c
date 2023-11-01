@@ -280,10 +280,10 @@ typedef struct {
 } tMacroStr;
 
 const tMacroStr StringList[8] = {
-         {6,0x0b,0x08,0x0f,0,0x0f,0x12}, // 0
-         {3,0x0b,0x08,0x0f},
-         {3,0,0x0f,0x12},
-         {6,0,0,0,0,0,0},
+         {5,0x0b,0x08,0x0f,0x0f,0x12}, // 'H','E','L','L','O'
+         {3,0x0b,0x08,0x0f},           // 'H','E','L'
+         {3,0,0x0f,0x12},              // 'L','O'
+         {6,0,0,0,0,0,0},              //  Nuthin
 };
                       
 
@@ -392,9 +392,19 @@ void APP_Macro(void) {
              if (countdown == 0) { // This is a setup condition
                 strId=MacroList[macroId][macro_offset].cmd&0x0F;
                 str_offset = 0;
-                countdown = StringList[strId].len;
+                countdown = StringList[strId].len<<1;
              } 
 
+             if ((countdown&0x01)==0) {
+                 inputReport.keys[i++] = StringList[strId].str[str_offset];
+                 str_offset++;
+             }
+
+             countdown--;
+             if (countdown==0) {
+                macro_offset++;
+             }
+/*
              while ((countdown)&&(i<sizeof(inputReport)-2)) {
                  // We are sending a character
                  inputReport.keys[i++] = StringList[strId].str[str_offset];
@@ -405,6 +415,7 @@ void APP_Macro(void) {
                     macro_offset++;
                  }
              }
+*/
              break; 
          default:
              break;
